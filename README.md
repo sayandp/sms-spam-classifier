@@ -1,159 +1,84 @@
 # SMS Spam Classifier
 
-A machine learning application that classifies SMS messages as spam or legitimate (ham) using a Naive Bayes classifier with TF-IDF vectorization.
+A compact SMS spam detection app using TF-IDF + Naive Bayes and a Streamlit front-end.
 
-## Features
+Live demo: https://share.streamlit.io/sayandp/sms-spam-classifier/main/app.py
 
-- **Text Preprocessing**: Removes special characters, converts to lowercase, applies stemming, and removes stopwords
-- **TF-IDF Vectorization**: Converts cleaned text into numerical features (max 3000 features)
-- **Naive Bayes Classification**: Fast and efficient probabilistic classifier
-- **Streamlit Web Interface**: Easy-to-use interactive web application
-- **Real-time Predictions**: Instantly classify any SMS message
+## What this repo contains
 
-## Project Structure
+- `spam.csv` — original SMS spam dataset
+- `sms_classi.py` — training script (preprocess, train, evaluate, save `nb_model.pkl` and `tfidf.pkl`)
+- `app.py` — Streamlit app that loads the saved model and vectorizer for predictions
+- `nb_model.pkl`, `tfidf.pkl` — serialized model & vectorizer (included for quick demo)
+- `requirements.txt` — pinned dependencies
 
-```
-sms-spam-classifier/
-├── spam.csv                    # Dataset with SMS messages and labels
-├── sms_classi.py              # Training script
-├── app.py                     # Streamlit web application
-├── nb_model.pkl               # Trained Naive Bayes model
-├── tfidf.pkl                  # TF-IDF vectorizer
-├── requirements.txt           # Project dependencies
-└── README.md                  # Project documentation
+## Quick start (local)
+
+1. Clone the repository:
+
+```powershell
+git clone https://github.com/sayandp/sms-spam-classifier.git
+cd sms-spam-classifier
 ```
 
-## Installation
+2. Create and activate a virtual environment:
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/sms-spam-classifier.git
-   cd sms-spam-classifier
-   ```
-
-2. **Create a virtual environment**
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate  # On Windows
-   source .venv/bin/activate  # On macOS/Linux
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-### Training the Model
-
-Run the training script to retrain the model on the dataset:
-```bash
-python sms_classi.py
+```powershell
+python -m venv .venv
+.\.venv\Scripts\activate
 ```
 
-This will:
-- Load and preprocess the SMS dataset
-- Train a Naive Bayes classifier
-- Display model performance metrics
-- Save the model and vectorizer for deployment
+3. Install dependencies:
 
-### Running the Web App
+```powershell
+pip install -r requirements.txt
+```
 
-Start the Streamlit application:
-```bash
+4. Run the Streamlit app:
+
+```powershell
 streamlit run app.py
 ```
 
-The app will open at `http://localhost:8501` where you can:
-- Enter an SMS message
-- Get instant classification (Spam or Ham)
-- View prediction results
+Open http://localhost:8501 when the server starts.
 
-## Dataset
+## Training / Retraining
 
-The project uses the **SMS Spam Collection Dataset** which contains:
-- **5,574 SMS messages**
-- **2 classes**: Ham (legitimate) and Spam
-- **Features**: Message text
+To retrain the model on `spam.csv` (and overwrite the pickles):
 
-### Data Labels
-- **Ham (0)**: Legitimate SMS messages
-- **Spam (1)**: Spam/unwanted SMS messages
+```powershell
+python sms_classi.py
+```
 
-## Model Performance
+After training the script will save `nb_model.pkl` and `tfidf.pkl` in the project folder.
 
-The Naive Bayes classifier achieves high accuracy on the SMS dataset with:
-- Fast training time
-- Good generalization
-- Efficient prediction
-- Interpretable results
+## NLTK stopwords note (deployment)
 
-## Technical Stack
+The app includes a small compatibility step to ensure NLTK stopwords are available in environments that do not have NLTK data preinstalled (Streamlit Cloud, etc.). The code downloads stopwords into a local `nltk_data/` folder at runtime if needed.
 
-- **Python 3.14**
-- **pandas**: Data manipulation
-- **scikit-learn**: Machine learning
-- **nltk**: Natural language processing
-- **streamlit**: Web application framework
-- **pickle**: Model serialization
+This folder is intentionally not committed — ensure `nltk_data/` is present in `.gitignore`.
 
-## Requirements
+## Deployment (Streamlit Cloud)
 
-See `requirements.txt` for the complete list of dependencies.
+1. Push this project to GitHub (already done): https://github.com/sayandp/sms-spam-classifier
+2. Sign in to https://share.streamlit.io with your GitHub account
+3. Click **New app** → select the `sayandp/sms-spam-classifier` repo → branch `main` → file `app.py` → **Deploy**
 
-## Deployment
+## Files of interest
 
-### Streamlit Cloud
-
-Deploy your app on Streamlit Cloud:
-
-1. Push this repository to GitHub
-2. Sign up at [Streamlit Cloud](https://streamlit.io/cloud)
-3. Click "New app" and connect your GitHub repository
-4. Select this repository and specify `app.py` as the main file
-5. Deploy!
-
-## How It Works
-
-1. **Text Cleaning**: 
-   - Remove special characters
-   - Convert to lowercase
-   - Remove stopwords
-   - Apply Porter Stemming
-
-2. **Vectorization**: Convert cleaned text to TF-IDF vectors
-
-3. **Classification**: Use Naive Bayes to predict spam probability
-
-4. **Result**: Display classification result to user
-
-## Future Improvements
-
-- Add more classifiers (SVM, Random Forest, etc.)
-- Implement model comparison
-- Add confidence scores
-- Support multiple languages
-- Implement active learning
-- Add chat history/logging
+- `app.py` — main web app
+- `sms_classi.py` — training pipeline
+- `requirements.txt` — runtime dependencies
 
 ## Contributing
 
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
+Contributions welcome: open issues or submit PRs. For code/style consistency, please run tests and keep changes small.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License
 
-## Author
+## Contact
 
-Created as a machine learning classification project.
-
-## Acknowledgments
-
-- Dataset: SMS Spam Collection Dataset
-- Framework: Streamlit
-- Libraries: scikit-learn, NLTK, pandas
+Repo: https://github.com/sayandp/sms-spam-classifier
+Live app: https://share.streamlit.io/sayandp/sms-spam-classifier/main/app.py
